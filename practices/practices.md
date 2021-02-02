@@ -211,6 +211,27 @@ Or we can also be specific and import only what we need:
 import{sum,pi}from"lib/math";
 
 console.log("2π = "+sum(pi,pi));
-``
+```
 
+## Package Management
+
+Other languages have long had their own package repositories and managers to
+make it easier to find and install third-party libraries and components. Node.js
+comes with its own package manager and repository, npm. Although there are
+other package managers available, npm has become the de facto JavaScript 
+package manager and is said to be the largest package registry in the world.
+
+In the npm repository you can find third-party modules that you can easily
+download and use in your projects with a single npm install <package> 
+command. The packages are downloaded into a local node_modules directory,
+which contains all the packages and their dependencies.
+
+The packages that you download can be registered as dependencies of your
+project in a package.json file, along with information about your project or
+module (which can itself be published as a package on npm).
+
+You can define separate dependencies for both development and production.
+While the production dependencies are needed for the package to work, the
+development dependencies are only necessary for the developers of the
+package.
 
