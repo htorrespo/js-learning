@@ -235,3 +235,74 @@ While the production dependencies are needed for the package to work, the
 development dependencies are only necessary for the developers of the
 package.
 
+
+Example package.json file
+
+{
+  "name":"demo",
+  "version":"1.0.0",
+  "description":"Demo package.json",
+  "main":"main.js","dependencies": {
+    "mkdirp":"^0.5.1",
+    "underscore":"^1.8.3"
+  },
+  "devDependencies":{},
+  "scripts":{
+    "test":"echo \"Error: no test specified\" && exit 1"
+  },
+  "author":"Sitepoint",
+  "license":"ISC"
+}
+
+## Build Tools
+
+The code that we write when developing modern JavaScript web applications
+almost never is the same code that will go to production. We write code in a
+modern version of JavaScript that may not be supported by the browser, we
+make heavy use of third-party packages that are in a node_modules folder along
+with their own dependencies, we can have processes like static analysis tools or
+minifiers, etc. Build tooling exists to help transform all this into something that
+can be deployed efficiently and that’s understood by most web browsers.
+
+### Module bundling
+
+When writing clean, reusable code with ES2015/CommonJS modules, we need
+some way to load these modules (at least until browsers support ES2015 module
+loading natively). Including a bunch of script tags in your HTML isn’t really a
+viable option, as it would quickly become unwieldy for any serious application,
+and all those separate HTTP requests would hurt performance.
+
+We can include all the modules where we need them using the import
+statement from ES2015 (orrequire, for CommonJS) and use a module bundler 
+to combine everything together into one or more files (bundles). It’s this bundled
+file that we’re going to upload to our server and include in our HTML. It will
+include all your imported modules and their necessary dependencies.
+
+There are currently a couple of popular options for this, the most popular ones 
+being Webpack, Browserify and Rollup.js. You can choose one or another
+depending on your needs.
+
+If you want to learn more about module bundling and how it fits into the 
+bigger picture of app development, I recommend reading Understanding JavaScript Modules: Bundling & Transpiling (https://www.sitepoint.com/javascript-modules-bundling-transpiling/)
+
+### Transpilation
+
+While support for modern JavaScript is pretty good among newer browsers, your
+target audience may include legacy browsers and devices with partial or nosupport.
+
+In order to make our modern JavaScript work, we need to translate the code we
+write to its equivalent in an earlier version (usually ES5). The standard tool for
+this task is Babel— a compiler that translates your code into compatible code for
+most browsers. In this way, you don’t have to wait for vendors to implement
+everything; you can just use all the modern JS features.
+
+There are a couple of features that need more than a syntax translation. Babel
+includes a Polyfill that emulates some of the machinery required for some
+complex features such as promises.
+
+### Build systems & task runners
+
+Module bundling and transpilation are just two of the build processes that we
+may need in our projects. Others include code minification (to reduce file sizes),
+tools for analysis, and perhaps tasks that don’t have anything to do with
+JavaScript, like image optimization or CSS/HTML pre-processing.
