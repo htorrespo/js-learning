@@ -5,7 +5,7 @@ skills.
 You’ll need to be familiar with HTML and CSS and have a reasonable level 
 of understanding of JavaScript in order to follow the discussion.
 
-### JavaScript ES2015+
+## JavaScript ES2015+
 
 In 2015, the sixth version ofECMAScript— the specification that defines the
 JavaScript language — was released under the name ofES2015(still often
@@ -306,3 +306,133 @@ Module bundling and transpilation are just two of the build processes that we
 may need in our projects. Others include code minification (to reduce file sizes),
 tools for analysis, and perhaps tasks that don’t have anything to do with
 JavaScript, like image optimization or CSS/HTML pre-processing.
+
+The management of tasks can become a laborious thing to do, and we need a
+way to handle it in an automated way, being able to execute everything with
+simpler commands. The two most popular tools for this are Grunt.js and Gulp.js,
+which provide a way to organize your tasks into groups in an ordered way.
+
+For example, you can have a command like gulp build which may run a code
+linter, the transpilation process with Babel, and module bundling with Browserify.
+Instead of having to remember three commands and their associated arguments
+in order, we just execute one that will handle the whole process automatically.
+
+Wherever you find yourself manually organizing processing steps for your
+project, think if it can be automatized with a task runner.
+
+Further reading: An Introduction to Gulp.js (https://www.sitepoint.com/introduction-gulp-js/).
+
+## Application Architecture
+
+Web applications have different requirements from websites. For example, while
+page reloads may be acceptable for a blog, that’s certainly not the case for an
+application like Google Docs. Your application should behave as closely as
+possible to a desktop one. Otherwise, the usability will be compromised.
+Old-style web applications were usually done by sending multiple pages from a
+web server, and when a lot of dynamism was needed, content was loaded via
+Ajax by replacing chunks of HTML according to user actions. Although it was a
+big step forward to a more dynamic web, it certainly had its complications.
+Sending HTML fragments or even whole pages on each user action represented
+a waste of resources — especially of time, from the user’s perspective. The
+usability still didn’t match the responsiveness of desktop applications.
+
+Looking to improve things, we created two new methods to build web
+applications — from the way we present them to the user, to the way we
+communicate between the client and the server. Although the amount of
+JavaScript required for an application also increased drastically, the 
+result is now applications that behave very closely to native ones, without 
+page reloading or extensive waiting periods each time we click a button.
+
+### Single Page Applications (SPAs)
+
+The most common, high-level architecture for web applications is called
+SPA, which stands for Single Page Application. SPAs are big blobs of JavaScript that
+contain everything the application needs to work properly. The UI is rendered
+entirely client-side, so no reloading is required. The only thing that changes is the
+data inside the application, which is usually handled with a remote API via
+Ajax or another asynchronous method of communication.
+
+One downside to this approach is that the application takes longer to load for the
+first time. Once it has been loaded, however, transitions between views (pages)
+are generally a lot quicker, since it’s only pure data being sent between client and
+server.
+
+### Universal / Isomorphic Applications
+
+Although SPAs provide a great user experience, depending on your needs, they
+might not be the optimal solution — especially if you need quicker initial
+response times or optimal indexing by search engines.
+
+There’s a fairly recent approach to solving these problems, called Isomorphic (or 
+Universal) JavaScript applications. In this type of architecture, most of the code
+can be executed both on the server and the client. You can choose what you
+want to render on the server for a faster initial page load, and after that, the
+client takes over the rendering while the user is interacting with the app.
+Because pages are initially rendered on the server, search engines can index
+them properly.
+
+## Deployment
+
+With modern JavaScript applications, the code you write is not the same as the
+code that you deploy for production: you only deploy the result of your build
+process. The workflow to accomplish this can vary depending on the size of your
+project, the number of developers working on it, and sometimes the tools/libraries 
+you’re using.
+
+For example, if you’re working alone on a simple project, each time you’re ready
+for deployment you can just run the build process and upload the resulting files
+to a web server. Keep in mind that you only need to upload the resulting files
+from the build process (transpilation, module bundling, minification, etc.), which
+can be just one .js file containing your entire application and dependencies.
+
+You can have a directory structure like this:
+
+```termminal
+├── dist
+│   ├── app.js
+│   └── index.html
+├── node_modules
+├── src
+│   ├── lib
+│   │   ├── login.js
+│   │   └── user.js
+│   ├── app.js
+│   └── index.html
+├── gulpfile.js
+├── package.json
+└── README
+```
+
+You thus have all of your application files in a src directory, written in ES2015+,
+importing packages installed with npm and your own modules from a lib 
+directory.
+
+Then you can run Gulp, which will execute the instructions from a gulpfile.js
+to build your project — bundling all modules into one file (including the ones
+installed with npm), transpiling ES2015+ to ES5, minifying the resulted file, etc.
+Then you can configure it to output the result in a convenient dist directory.
+
+If you have files that don’t need any processing, you can just copythem from
+src to the dist directory. You can configure a task for that in your build system.
+
+Now you can just upload the files from the dist directory to a web server,
+without having to worry about the rest of the files, which are only useful for
+development.
+
+### Team development
+
+If you’re working with other developers, it’s likely you’re also using a shared code
+repository, like GitHub, to store the project. In this case, you can run the build
+process right before making commits and store the result with the other files in
+the Git repository, to later be downloaded onto a production server.
+
+However, storing built files in the repository is prone to errors if several
+developers are working together, and you might want to keep everything clean
+from build artifacts. Fortunately, there’s a better way to deal with that problem:
+you can put a service like Jenkins, Travis CI, CircleCI, etc. in the middle of the
+process, so it can automatically build your project after each commit is pushed to
+the repository. Developers only have to worry about pushing code changes
+without building the project first each time. The repository is also kept clean of
+automatically generated files, and at the end, you still have the built files
+available for deployment.
+
