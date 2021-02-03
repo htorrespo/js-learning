@@ -136,3 +136,96 @@ If a method accepts large configuration objects as an argument, your code can
 become quite large. It’s common to prepare some variables and add them to said
 object. Property shorthands are _syntactic sugar_ (is designed to make things easier 
 to read or to express) to make this step shorter and more readable:
+
+```javascript
+const a = 'foo', b = 42, c = function () {};
+// Previously we would use these constants like this.
+const alphabet = {
+  a: a,
+  b: b,
+  c: c,
+};
+
+// But with the new shorthand we can actually do this now,
+// which is equivalent to the above.
+const alphabet = { a, b, c };
+```
+
+### Shorten Your API
+
+Okay, back to another, more common example. The following function takes
+some data, mutates it and calls another method:
+
+```javascript
+function updateSomething (data = {}) {
+  const target = data.target;
+  const veryLongProperty = data.veryLongProperty;
+  let willChange = data.willChange;
+
+  if (willChange === 'unwantedValue') {
+    willChange = 'wayBetter';
+  }
+
+  // Do more.
+  useDataSomewhereElse({
+    target: target,
+    property: veryLongProperty,
+    willChange: willChange,
+    // .. more
+  });
+}
+```
+
+It often happens that we name variables and object property names the same.
+Using the property shorthand, combined with destructuring, we actually can
+shorten our code quite a bit:
+
+```javascript
+function updateSomething (data = {}) {
+  // Here we use destructuring to store the constants from the data object.
+  const { target, veryLongProperty: property } = data;
+  let { willChange } = data;
+
+  if (willChange === 'unwantedValue') {
+    willChange = 'wayBetter';
+  }
+
+  'unwantedValue'// Do more.
+  useDataSomewhereElse({ target, property, willChange });
+}
+```
+
+Again, this might take a while to get used to. In the end, it’s one of those new
+features in JavaScript which helped me write code faster and work with cleaner
+function bodies.
+
+But wait, there’s more! Property shorthands can also be applied to method
+definitions inside an object:
+
+```javascript
+// Instead of writing the function keyword everytime,
+const module = {
+  foo: 42,
+  bar: function (value) {
+    // do something
+  }
+};
+
+// we can just omit it and have shorter declarations
+const module = {
+  foo: 42,
+  bar (value) {
+    // do something
+  }
+};
+```
+
+### Conclusion
+Default parameters and property shorthands are a great way to make your
+methods more organized, and in some cases even shorter. Overall, default
+function parameters helped me to focus more on the actual purpose of the
+method without the distraction of lots of default preparations and if statements.
+
+Property shorthands are indeed more of a cosmetic feature, but I found myself
+being more productive and spending less time writing all the variables,
+configuration objects, and function keywords.
