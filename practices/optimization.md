@@ -150,15 +150,48 @@ reflows.
 Considering that most animations are running either during loading or user
 interaction, this can give your web apps the much-needed room to breathe.
 
-The Web Animations API (https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API) is an upcoming feature set that will allow you to do
+The Web Animations API (https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API) 
+is an upcoming feature set that will allow you to do
 performant JS animations off the main thread, but for now, stick to CSS
 transitions and techniques like FLIP (https://aerotwist.com/blog/flip-your-animations/).
 
 ## Bundle Sizes are Everything
 
 Today it’s all about bundles. Gone are the times of Bower and dozens of
-<script> tags before the closing </body> tag.
+_<script>_ tags before the closing _</body>_ tag.
+
+Now it’s all about _npm install_ -ing whatever shiny new toy you find on NPM,
+bundling them together with Webpack in a huge single 1MB JS file and
+hammering your users’ browser to a crawl while capping off their data plans.
+
+Try shipping less JS. You might not need the entire Lodash library 
+(https://surma.github.io/underdash/) for your
+project. Do you absolutely need to use a JS framework? If yes, have you
+considered using something other than React, such as Preact 
+(https://github.com/preactjs/preact) or HyperHTML (https://viperhtml.js.org/),
+which are less than 1/20 the size of React? Do you need 
+TweenMax (https://greensock.com/tweenmax) for that
+scroll-to-top animation? The convenience of npm and isolated components in
+frameworks comes with a downside: the first response of developers to a
+problem has become to throw more JS at it. When all you have is a hammer,
+everything looks like a nail.
+
+When you’re done pruning the weeds and shipping less JS, try shipping it
+smarter. Ship what you need, when you need it.
+
+Webpack 3 has amazing features called code splitting 
+(https://webpack.js.org/guides/code-splitting/) and dynamic imports
+(https://webpack.js.org/guides/code-splitting/#dynamic-imports).
+Instead of bundling all your JS modules into a monolithic _app.js_ bundle, it can
+automatically split the code using the _import()_ syntax and load it
+asynchronously.
+
+You don’t need to use frameworks, components and client-side routing to gain
+the benefit of it, either. Let’s say you have a complex piece of code that powers
+your _.mega-widget_ , which can be on any number of pages. You can simply write
+the following in your main JS file:
 
 
-
+```terminal
 &_______________________________________________________________________
+```
