@@ -191,6 +191,37 @@ the benefit of it, either. Let’s say you have a complex piece of code that pow
 your _.mega-widget_ , which can be on any number of pages. You can simply write
 the following in your main JS file:
 
+```javascript
+if (document.querySelector('.mega-widget')) {
+  import('./mega-widget');
+}
+```
+
+If your app finds the widget on the page, it will dynamically load the required
+supporting code. Otherwise, all’s good.
+
+Also, Webpack needs its own runtime to work, and it injects it into all the .js files
+it generates. If you use the _commonChunks_ plugin, you can use the following to
+extract the runtime into its own chunk
+(https://medium.com/connect-the-dots/caching-assets-long-term-with-webpack-5ad24a4c39bd):
+
+```javascript
+new webpack.optimize.CommonsChunkPlugin({
+  name: 'runtime',
+}),
+```
+
+It will strip out the runtime from all your other chunks into its own file, in this case
+named _runtime.js_ . Just make sure to load it before your main JS bundle. For
+example:
+
+```html
+<script src="runtime.js">
+<script src="main-bundle.js">
+```
+
+
+
 
 ```terminal
 &_______________________________________________________________________
