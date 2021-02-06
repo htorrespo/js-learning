@@ -16,6 +16,8 @@ creation — the object literal. JavaScript touts that objects can be created �
 nilo”, out of nothing — no class, no template, no prototype — just poof!, an object
 with methods and data:
 
+pag 56
+
 ## Factory Functions
 
 ## Prototype Chains
