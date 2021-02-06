@@ -220,7 +220,56 @@ example:
 <script src="main-bundle.js">
 ```
 
+Then there’s the topic of transpiled code and polyfills. If you’re writing modern
+(ES6+) JavaScript, you’re probably using Babel to transpile it into ES5 compatible
+code. Transpiling not only increases file size due to all the verbosity, but also
+complexity, and it often has performance regressions 
+(https://github.com/babel/babel/pull/6748) compared to native ES6+
+code.
 
+Along with that, you’re probably using the _babel-polyfill_ package and
+_whatwg-fetch_ to patch up missing features in older browsers. Then, if you’re
+writing code using _async/await_ , you also transpile it using generators needed to
+include the _regenerator-runtime_ …
+
+The point is, you add almost 100 kilobytes to your JS bundle, which has not only a
+huge file size, but also a huge parsing and executing cost, in order to support
+older browsers.
+
+There’s no point in punishing people who are using modern browsers, though. An
+approach I use, and which Philip Walton covered in this article
+(https://philipwalton.com/articles/deploying-es2015-code-in-production-today/), is to create two
+separate bundles and load them conditionally. Babel makes this easy with
+_babel-preset-env_ . For instance, you have one bundle for supporting IE 11, and
+the other without polyfills for the latest versions of modern browsers.
+
+A dirty but efficient way is to place the following in an inline script:
+
+```javascript
+(function() {
+  try {
+    new Function('async () => {}')();
+  } catch (error) {
+    // create script tag pointing to legacy-bundle.js;
+    return;
+  }
+  // create script tag pointing to modern-bundle.js;;
+})();
+```
+
+If the browser isn’t able to evaluate an _async_ function, we assume that it’s an old
+browser and just ship the polyfilled bundle. Otherwise, the user gets the neat and
+modern variant.
+
+## Conclusion
+
+Make sure you test your website’s performance on low-end devices, under real
+network conditions. Your site should load fast and be interactive as soon as
+possible. This means shipping less JS, and shipping faster by any means
+necessary. Your code should always be minified, split into smaller, manageable
+bundles and loaded asynchronously whenever possible. On the server side, make
+sure it has HTTP/2 enabled for faster parallel transfers and gzip/Brotli
+compression to drastically reduce the transfer sizes of your JS.
 
 
 ```terminal
