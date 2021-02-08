@@ -16,6 +16,12 @@ reviewing code, and helping each other get better.
 
 easybank landing page 
 
+Solucion
+
+https://www.frontendmentor.io/solutions/easybank-landing-page-L_tuVbmTr
+
+code (https://github.com/joao-doliveira/FEM-easybank-landing-page)
+
 <!--
 &_____________________________________________________________________
 -->
