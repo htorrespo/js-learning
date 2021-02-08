@@ -22,6 +22,12 @@ https://www.frontendmentor.io/solutions/easybank-landing-page-L_tuVbmTr
 
 code (https://github.com/joao-doliveira/FEM-easybank-landing-page)
 
+Directorio de trabajo:
+
+C:\Users\usrer\winhome\webdev\project
+
+
+
 <!--
 &_____________________________________________________________________
 -->
