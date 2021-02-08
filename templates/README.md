@@ -26,6 +26,29 @@ Directorio de trabajo:
 
 C:\Users\usrer\winhome\webdev\project
 
+Now, I am using vscode extension live sass compiler,
+
+at bottom bar, when I clicked Watched Sass then it compiled automatically 
+scss file to css but in same folder.
+
+main.scss is compiled to main.css.
+
+
+
+Go to VScode menu- file > preferences > settings > extension > 
+live sass copile config > edit in settings.json
+
+and paste it code >>
+
+```json
+  "liveSassCompile.settings.formats": [
+    {
+      "format": "expanded",
+      "extensionName": ".css",
+      "savePath": "~/./dist/css/"
+    }
+  ]
+```
 
 
 <!--
