@@ -45,7 +45,7 @@ and paste it code >>
     {
       "format": "expanded",
       "extensionName": ".css",
-      "savePath": "~/./dist/css/"
+      "savePath": "./dist/css/"
     }
   ]
 ```
