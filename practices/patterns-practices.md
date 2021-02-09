@@ -105,14 +105,114 @@ function thing() {
 var o = thing();
 ```
 
+But there’s a drawback. This is going to result in some repetition. The first and
+last lines of the thing function are going to be repeated almost verbatim in
+every such delegating-to-prototype factory function.
+
 ## ES5 Classes
+
+We can isolate the repetitive lines by moving them into their own function. This
+function would create an object that delegates to some other arbitrary function’s
+prototype, then invoke that function with the newly created object as an
+argument, and finally return the object:
+
+```javascript
+function create(fn) {
+  var o = Object.create(fn.prototype);
+  
+  fn.call(o);
+  return o;
+}
+
+// ...
+Thing.prototype.f = function() {};
+Thing.prototype.g = function() {};
+
+function Thing() {
+  this.x = 42;
+  this.y = 3.14;
+}
+var o = create(Thing);
+```
+
+In fact, this too is such a common pattern that the language has some built-in
+support for it. The _create_ function we defined is actually a rudimentary version
+of the _new_ keyword, and we can drop-in replace _create_ with _new_ :
+
+```javascript
+Thing.prototype.f = function() {};
+Thing.prototype.g = function() {};
+
+function Thing() {
+  this.x = 42;
+  this.y = 3.14;
+}
+
+var o = new Thing();
+```
+
+We’ve now arrived at what we commonly call “ES5 classes”. They’re object
+creation functions that delegate shared data to a prototype object and rely on
+the _new_ keyword to handle repetitive logic.
+
+But there’s a drawback. It’s verbose and ugly, and implementing inheritance is
+even more verbose and ugly.
 
 ## ES6 Classes
 
+A relatively recent addition to JavaScript is ES6 classes, which offer a
+significantly cleaner syntax for doing the same thing:
+
+```javascript
+class Thing {
+  constructor() {
+  this.x = 42;
+  this.y = 3.14;
+  }
+
+  f() {}
+  g() {}
+}
+
+const o = new Thing();
+```
+
 ## Comparison
+
+Over the years, we JavaScripters have had an on-and-off relationship with the
+prototype chain, and today the two most common styles you’re likely to
+encounter are the class syntax, which relies heavily on the prototype chain, and
+the factory function syntax, which typically doesn’t rely on the prototype chain at
+all. The two styles differ — but only slightly — in performance and features.
+
 
 ### Performance
 
+JavaScript engines are so heavily optimized today that it’s nearly impossible to
+look at our code and reason about what will be faster. Measurement is crucial.
+Yet sometimes even measurement can fail us. Typically, an updated JavaScript
+engine is released every six weeks, sometimes with significant changes in
+performance, and any measurements we had previously taken, and any
+decisions we made based on those measurements, go right out the window. So,
+my rule of thumb has been to favor the most official and most widely used
+syntax, under the presumption that it will receive the most scrutiny and be the
+most performant most of the time. Right now, that’s the class syntax, and as I
+write this, the class syntax is roughly 3x faster than a factory function returning a
+literal.
+
+
 ### Features
 
+What few feature differences there were between classes and factory functions
+evaporated with ES6. Today, both factory functions and classes can enforce truly
+private data—factory functions with closures and classes with weak maps. Both
+can achieve multiple-inheritance factory functions by mixing other properties
+into their own object, and classes also by mixing other properties into their
+prototype, or with class factories, or with proxies. Both factory functions and
+classes can return any arbitrary object if need be. And both offer a simple syntax.
+
 ## Conclusion
+
+All things considered, my preference for JavaScript object creation is to use the
+class syntax. It’s standard, it’s simple and clean, it’s fast, and it provides every
+feature that once upon a time only factories could deliver.
