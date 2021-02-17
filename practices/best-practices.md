@@ -146,13 +146,200 @@ z.push(1); // valid, and z is now [1]
 z = [2] // error
 ```
 pagina 66
+For this reason, I remain skeptical when people recommend using _const_
+constantly in place of _var_ for all variable declarations, even when you have
+every intention of never altering them after they’ve been declared.
 
+While it’s a good practice to treat your variables as immutable, JavaScript won’t
+enforce that for the contents of a reference variables like arrays and objects
+declared with _const_ without some help from external scripts. So the _const_
+keyword may make casual readers and newcomers to JavaScript expect more
+protection than it actually provides.
+
+I’m inclined to use _const_ for simple number or string variables I want to initialize
+and never alter, or for named functions and classes that I expect to define once
+and then leave closed for modification. Otherwise, I use _let_ for most variable
+declarations — especially those I want to be bounded by the scope in which they
+were defined. I haven’t found the need to use _var_ lately, but if I wanted a
+declaration to break scope and get hoisted to the top of my script, that’s how I
+would do it.
 
 ## Limiting the Scope of the Function
 
+Traditional functions, defined using the _function_ keyword, can be called to
+execute a series of statements defined within a block on any parameters passed
+in, and optionally return a value:
+
+```javascript
+function doSomething(param) {
+  return(`Did it: ${param}`);
+}
+console.log(doSomething("Hello")); // "Did it: Hello"
+```
+
+They can also be used with the _new_ keyword to construct objects with
+prototypal inheritance, and that definition can be placed anywhere in the scope
+where they might be called:
+
+```javascript
+function Animal(name) {
+  this.name = name;
+}
+
+let cat = new Animal("Fluffy");
+console.log(`My cat's name is ${cat.name}.`); // "My cat's name is Fluffy."
+```
+
+Functions used in either of these ways can be defined before or after they’re
+called. It doesn’t matter to JavaScript.
+
+```javascript
+console.log(doSomething("Hello")); // "Did it: Hello"
+
+let cat = new Animal("Fluffy");
+console.log(`My cat's name is ${cat.name}.`); `My cat's name is ${cat.name}.`// "My cat's name is 
+
+function doSomething(param) {
+  return(`Did it: ${param}`);
+}
+
+function Animal(name) {
+  this.name = name;
+}
+```
+
+traditional function also creates its own context, defining a value for this that
+exists only within the scope of the statement body. Any statements or subfunctions
+defined within it are executing, and optionally allowing us to bind a
+value for this when calling the function.
+
+That’s a lot for the keyword to do, and it’s usually more than a programmer needs
+in any one place. So modern JavaScript split out the behavior of the traditional
+function into arrow functions and classes.
+
+
 ### Getting to Class on Time
 
+One part of the traditional function has been taken over by the class keyword.
+This allows programmers to choose whether they would prefer to follow a more
+functional programming paradigm with callable arrow functions, or use a more
+object-oriented approach with classes to substitute for the prototypal
+inheritance of traditional functions.
+
+Classes in JavaScript look and act a lot like simple classes in other object
+oriented languages, and may be an easy stepping stone for Java and C++
+developers looking to expand into JavaScript as JavaScript expands out to the
+server.
+
+One difference between functions and classes when doing object-oriented
+programming in JavaScript is that classes in JavaScript require forward
+declaration, the way they do in C++ (although not in Java). That is, a _class_ needs
+to be declared in the script before it is instantiated with a _new_ keyword.
+Prototypal inheritance using the _function_ keyword works in JavaScript even if
+it’s defined later in the script, since a _function_ declaration is automatically
+hoisted to the top, unlike a _class_.
+
+```javascript
+// Using a function to declare and instantiate an object (hoisted)
+let aProto = new Proto("Myra");
+aProto.greet(); // "Hi Myra"
+
+function Proto(name) {
+  this.name = name;
+  this.greet = function() {
+    console.log(`Hi ${this.name}`);
+  };
+};
+
+// Using a class to declare and instantiate an object (not hoisted)
+class Classy {
+  constructor(name) {
+    this.name = name;
+  }
+  greet() {
+    console.log(`Hi ${this.name}`);
+  }
+};
+
+let aClassy = new Classy("Sonja");
+aClassy.greet(); // "Hi Sonja"
+```
+
 ### Pointed Differences with Arrow Functions
+
+The other aspect of traditional functions can now be accessed using arrow
+functions, a new syntax that allows you to write a callable function more
+concisely, to fit more neatly inside a callback. In fact, the simplest syntax for an
+arrow function is a single line that leaves off the curly braces entirely, and
+automatically returns the result of the statement executed:
+
+```javascript
+const traditional = function(data) {
+  return (`${data} from a traditional function`);
+}
+
+const arrow = data => `${data} from an arrow function`;
+
+console.log(traditional("Hi")); // "Hi from a traditional function"
+console.log(arrow("Hi")); // "Hi from an arrow function"
+```
+
+Arrow functions encapsulate several qualities that can make calling them more
+convenient, and leave out other behavior that isn’t as useful when calling a
+function. They are not drop-in replacements for the more versatile traditional
+_function_ keyword.
+
+For example, an arrow function inherits both _this_ and _arguments_ from the
+contexts in which it’s called. That’s great for situations like event handling or
+_setTimeout_ when a programmer frequently wants the behavior being called to
+apply to the context in which is it was requested. Traditional functions have
+forced programmers to write convoluted code that binds a function to an
+existing this by using _.bind(this)_. None of that is necessary with arrow
+functions.
+
+```javascript
+class GreeterTraditional {
+  constructor() {
+    this.name = "Joe";
+  }
+  greet() {
+    setTimeout(function () {
+      console.log(`Hello ${this.name}`);
+    }, 1000); // inner function has its own this with no name
+  }
+}
+
+let greeterTraditional = new GreeterTraditional();
+greeterTraditional.greet(); // "Hello "
+
+class GreeterBound {
+  constructor() {
+    this.name = "Steven";
+  }
+  greet() {
+    setTimeout(function () {
+      console.log(`Hello ${this.name}`);
+    }.bind(this), 1000); // passing this from the outside context
+  }
+}
+
+let greeterBound = new GreeterBound(); // "Hello Steven"
+greeterBound.greet();
+
+class GreeterArrow {
+  constructor() {
+    this.name = "Ravi";
+  }
+  greet() {
+    setTimeout(() => {
+      console.log(`Hello ${this.name}`);
+    }, 1000); // arrow function inherits this by default
+  }
+}
+
+let greeterArrow = new GreeterArrow();
+greeterArrow.greet(); // "Hello Ravi"
+```
 
 ## Understand What You’re Getting
 
