@@ -255,10 +255,10 @@ Install MongoDB
 
 To install MongoDB on WSL (Ubuntu 18.04):
 
-    Open your WSL terminal (ie. Ubuntu 18.04).
-    Update your Ubuntu packages: sudo apt update
-    Once the packages have updated, install MongoDB with: sudo apt-get install mongodb
-    Confirm installation and get the version number: mongod --version
+1. Open your WSL terminal (ie. Ubuntu 18.04).
+2. Update your Ubuntu packages: _sudo apt update_
+3. Once the packages have updated, install MongoDB with: _sudo apt-get install mongodb_
+4. Confirm installation and get the version number: _mongod --version_
 
 There are 3 commands you need to know once MongoDB is installed:
 
@@ -272,13 +272,13 @@ You might see the command sudo systemctl status mongodb used in tutorials or art
 
 To run your Mongo database in a local server:
 
-    Check the status of your database: sudo service mongodb status You should see a [Fail] response, unless you've already started your database.
+1. Check the status of your database: sudo service mongodb status You should see a [Fail] response, unless you've already started your database.
 
-    Start your database: sudo service mongodb start You should now see an [OK] response.
+2. Start your database: sudo service mongodb start You should now see an [OK] response.
 
-    Verify by connecting to the database server and running a diagnostic command: mongo --eval 'db.runCommand({ connectionStatus: 1 })' This will output the current database version, the server address and port, and the output of the status command. A value of 1 for the "ok" field in the response indicates that the server is working.
+3. Verify by connecting to the database server and running a diagnostic command: mongo --eval 'db.runCommand({ connectionStatus: 1 })' This will output the current database version, the server address and port, and the output of the status command. A value of 1 for the "ok" field in the response indicates that the server is working.
 
-    To stop your MongoDB service from running, enter: sudo service mongodb stop
+4. To stop your MongoDB service from running, enter: sudo service mongodb stop
 
 Note
 
@@ -288,10 +288,10 @@ VS Code supports working with MongoDB databases via the Azure CosmosDB extension
 
 Learn more in the MongoDB docs:
 
-    Introduction to using MongoDB
-    Create users
-    Connect to a MongoDB instance on a remote host
-    CRUD: Create, Read, Update, Delete
-    Reference Docs
+- Introduction to using MongoDB
+- Create users
+- Connect to a MongoDB instance on a remote host
+- CRUD: Create, Read, Update, Delete
+- Reference Docs
 
 &_____________________________________________________________________
