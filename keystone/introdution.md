@@ -160,6 +160,96 @@ https://linuxhandbook.com/system-has-not-been-booted-with-systemd/
 itsuito@DESKTOP-RJ2U4HK:~/keystone/home-ximena$ sudo service mongodb
 Usage: /etc/init.d/mongodb {start|stop|force-stop|restart|force-reload|status}
 ```
+```terminal
+itsuito@DESKTOP-RJ2U4HK:~/keystone/home-ximena$ service mongodb start
+ * Starting database mongodb                                                                                            
+ * install: cannot change owner and permissions of ‘/run/mongodb’: No such file or directory
+start-stop-daemon: unable to open pidfile '/run/mongodb/mongodb.pid' for writing (No such file or directory)
+start-stop-daemon: unable to set gid to 120 (Operation not permitted)
+start-stop-daemon: child returned error exit status 2 (No such file or directory)
+
+itsuito@DESKTOP-RJ2U4HK:~/keystone/home-ximena$ sudo service mongodb start
+ * Starting database mongodb
+
+itsuito@DESKTOP-RJ2U4HK:~/keystone/home-ximena$ service --status-all
+ [ - ]  acpid
+ [ + ]  apache-htcacheclean
+ [ - ]  apache2
+ [ - ]  apparmor
+ [ ? ]  apport
+ [ - ]  atd
+ [ - ]  avahi-daemon
+ [ + ]  cgroupfs-mount
+ [ - ]  console-setup.sh
+ [ - ]  cron
+ [ ? ]  cryptdisks
+ [ ? ]  cryptdisks-early
+ [ - ]  dbus
+ [ - ]  docker
+ [ - ]  ebtables
+ [ ? ]  hwclock.sh
+ [ + ]  irqbalance
+ [ + ]  iscsid
+ [ - ]  keyboard-setup.sh
+ [ ? ]  kmod
+ [ - ]  lvm2
+ [ + ]  lvm2-lvmetad
+ [ + ]  lvm2-lvmpolld
+ [ - ]  lxcfs
+ [ - ]  lxd
+ [ - ]  mdadm
+ [ - ]  mdadm-waitidle
+ [ + ]  mongodb
+ [ + ]  open-iscsi
+ [ - ]  open-vm-tools
+ [ ? ]  plymouth
+ [ ? ]  plymouth-log
+ [ - ]  postgresql
+ [ - ]  procps
+ [ - ]  rsync
+ [ - ]  rsyslog
+ [ - ]  screen-cleanup
+ [ - ]  ssh
+ [ - ]  sysstat
+ [ ? ]  ubuntu-fan
+ [ - ]  udev
+ [ - ]  ufw
+ [ - ]  unattended-upgrades
+ [ - ]  uuidd
+ [ - ]  x11-common
+ 
+ itsuito@DESKTOP-RJ2U4HK:~/keystone/home-ximena$ node keystone
+----------------------------------------
+WARNING: MISSING MAILGUN CREDENTIALS
+----------------------------------------
+You have opted into email sending but have not provided
+mailgun credentials. Attempts to send will fail.
+
+Create a mailgun account and add the credentials to the .env file to
+set up your mailgun integration
+------------------------------------------------
+Applying update 0.0.1-admins...
+
+------------------------------------------------
+home-ximena: Successfully applied update 0.0.1-admins.
+
+Successfully created:
+
+*   1 User
+
+
+------------------------------------------------
+Successfully applied 1 update.
+------------------------------------------------
+
+------------------------------------------------
+KeystoneJS Started:
+home-ximena is ready on http://0.0.0.0:3000
+------------------------------------------------
+
+```
+
+
 
 
 &_____________________________________________________________________
