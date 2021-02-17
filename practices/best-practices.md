@@ -343,3 +343,23 @@ greeterArrow.greet(); // "Hello Ravi"
 
 ## Understand What You’re Getting
 
+It’s not all just syntactic sugar. A lot of the new changes in JavaScript have been
+introduced because new functionality was needed. But that doesn’t mean that
+the old reasons for JavaScript’s traditional syntax have gone away. Often it
+makes sense to continue using the traditional JavaScript syntax, and sometimes
+using the new syntax can make your code much faster to write and easier to
+understand.
+
+Check out those online tutorials you’re following. If the writer is using _var_ to
+initialize all of the variables, ignoring classes in favor of prototypal inheritance, or relying on _function_ statements in callbacks, you can expect the rest of the
+syntax to be based on older, traditional JavaScript. And that’s fine. There’s still a
+lot that we can learn and apply today from the traditional ways the JavaScript
+has always been taught and used. But if you see _let_ and _const_ in the
+intializations, arrow functions in callbacks, and classes as the basis for object oriented patterns, you’ll probably also see other modern JavaScript code in the
+examples.
+
+The best practice in modern JavaScript is paying attention to what the language
+is actually doing. Depending on what you’re used to, it may not always be
+obvious. But think about what the code you’re writing is trying to accomplish,
+where you’re going to need to deploy it, and who will be modifying it next. Then
+decide for yourself what the best approach would be.
