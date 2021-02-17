@@ -276,6 +276,9 @@ Promise.race([ async1, async2, async3 ])
   });
 ```
 
+
+### A Promising Future?
+
 Promises reduce callback hell but introduce their own problems.
 
 Tutorials often fail to mention that the whole Promise chain is asynchronous. Any
@@ -288,15 +291,21 @@ debugging can be problematic. However, it’s essential to learn the basics.
 
 Further Promise resources:
 
-MDN Promise documentation (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
-JavaScript Promises: an Introduction (https://web.dev/promises/)
-JavaScript Promises … In Wicked Detail (https://mattgreer.dev/articles/promises-in-wicked-detail/)
-Promises for asynchronous programming (https://exploringjs.com/es6/ch_promises.html)
+- MDN Promise documentation (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+- JavaScript Promises: an Introduction (https://web.dev/promises/)
+- JavaScript Promises … In Wicked Detail (https://mattgreer.dev/articles/promises-in-wicked-detail/)
+- Promises for asynchronous programming (https://exploringjs.com/es6/ch_promises.html)
 
 
-### A Promising Future?
 
 ## Async/Await
+
+Promises can be daunting, so ES2017 introduced _async_ and _await_ . While it
+may only be syntactical sugar, it makes Promises far sweeter, and you can avoid
+_.then()_ chains altogether. Consider the Promise-based example below:
+
+pagina 82
+
 
 ### Promises, Promises
 ### Asynchronous Awaits in Synchronous Loops
