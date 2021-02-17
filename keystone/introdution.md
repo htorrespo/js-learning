@@ -149,4 +149,17 @@ node keystone
 Then open http://localhost:3000 to view it in your browser.
 
 
+Install MongoDB from Default Ubuntu Repositories (Easy)
+https://phoenixnap.com/kb/how-to-install-mongodb-ubuntu
+
+
+How to fix 'System has not been booted with systemd' error?
+https://linuxhandbook.com/system-has-not-been-booted-with-systemd/
+
+```terminal
+itsuito@DESKTOP-RJ2U4HK:~/keystone/home-ximena$ sudo service mongodb
+Usage: /etc/init.d/mongodb {start|stop|force-stop|restart|force-reload|status}
+```
+
+
 &_____________________________________________________________________
