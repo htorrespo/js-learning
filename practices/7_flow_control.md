@@ -159,13 +159,140 @@ fs = require('fs'),
 readFileAsync = util.promisify(fs.readFile);
 readFileAsync('file.txt');
 ```
+Various client-side libraries also provide promisify options, but you can create
+one yourself in a few lines:
+
+```javascript
+// promisify a callback function passed as the last parameter
+// the callback function must accept (err, data) parameters
+function promisify(fn) {
+  return function() {
+    return new Promise(
+      (resolve, reject) => fn(
+        ...Array.from(arguments),
+        (err, data) => err ? reject(err) : resolve(data)
+      )
+    );
+  }
+}
+
+// example
+function wait(time, callback) {
+  setTimeout(() => { callback(null, 'done'); }, time);
+}
+
+const asyncWait = promisify(wait);
+ayscWait(1000);
+```
 
 
 ### Asynchronous Chaining
 
+Anything that returns a Promise can start a series of asynchronous function calls
+defined in _.then()_ methods. Each is passed the result from the previous
+_resolve_:
+
+```javascript
+asyncDBconnect('http://localhost:1234')
+  .then(asyncGetSession) // passed result of asyncDBconnect
+  .then(asyncGetUser) // passed result of asyncGetSession
+  .then(asyncLogAccess) // passed result of asyncGetUser
+  .then(result => { // non-asynchronous function
+    console.log('complete'); // (passed result of asyncLogAccess)
+    return result; // (result passed to next .then())
+  })
+  .catch(err => { // called on any reject
+    console.log('error', err);
+  });
+```
+
+Synchronous functions can also be executed in _.then()_ blocks. The returned
+value is passed to the next _.then()_ (if any).
+
+The _.catch()_ method defines a function that’s called when any previous
+_reject_ is fired. At that point, no further _.then()_ methods will be run. You can
+have multiple _.catch()_ methods throughout the chain to capture different
+errors.
+
+ES2018 introduces a _.finally()_ method, which runs any final logic regardless
+of the outcome — for example, to clean up, close a database connection etc. It’s
+currently supported in Chrome and Firefox only, but Technical Committee 39 has
+released a .finally() polyfill 
+(https://github.com/tc39/proposal-promise-finally/blob/fd934c0b42d59bf8d9446e737ba14d50a9067216/polyfill.js).
+
+```javascript
+function doSomething() {
+  doSomething1()
+  .then(doSomething2)
+  .then(doSomething3)
+  .catch(err => {
+    console.log(err);
+  })
+  .finally(() => {
+    // tidy-up here!
+  });
+}
+```
+
 ### Multiple Asynchronous Calls with Promise.all()
 
+Promise _.then()_ methods run asynchronous functions one after the other. If
+the order doesn’t matter — for example, initialising unrelated components — it’s
+faster to launch all asynchronous functions at the same time and finish when the
+last (slowest) function runs _resolve_.
+
+This can be achieved with _Promise.all()_. It accepts an array of functions and
+returns another Promise. For example:
+
+```javascript
+Promise.all([ async1, async2, async3 ])
+  .then(values => { // array of resolved values
+    console.log(values); // (in same order as function array)
+    return values;
+  })
+  .catch(err => { // called on any reject
+    console.log('error', err);
+  });
+```
+
+_Promise.all()_ terminates immediately if any one of the asynchronous functions
+calls _reject_.
+
+
 ### Multiple Asynchronous Calls with Promise.race()
+
+_Promise.race()_ is similar to _Promise.all()_ , except that it will resolve or reject
+as soon as the first Promise resolves or rejects. Only the fastest Promise-based
+asynchronous function will ever complete:
+
+```javascript
+Promise.race([ async1, async2, async3 ])
+  .then(value => { // single value
+    console.log(value);
+    return value;
+  })
+  .catch(err => { // called on any reject
+    console.log('error', err);
+  });
+```
+
+Promises reduce callback hell but introduce their own problems.
+
+Tutorials often fail to mention that the whole Promise chain is asynchronous. Any
+function using a series of promises should either return its own Promise or run
+callback functions in the final _.then()_ , _.catch()_ or _.finally()_ methods.
+
+I also have a confession: Promises confused me for a long time. The syntax often
+seems more complicated than callbacks, there’s a lot to get wrong, and
+debugging can be problematic. However, it’s essential to learn the basics.
+
+Further Promise resources:
+
+MDN Promise documentation (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+JavaScript Promises: an Introduction (https://web.dev/promises/)
+JavaScript Promises … In Wicked Detail (https://mattgreer.dev/articles/promises-in-wicked-detail/)
+Promises for asynchronous programming (https://exploringjs.com/es6/ch_promises.html)
+
 
 ### A Promising Future?
 
