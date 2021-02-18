@@ -284,7 +284,7 @@ Note
 
 MongoDB has several default parameters, including storing data in /data/db and running on port 27017. Also, mongod is the daemon (host process for the database) and mongo is the command-line shell that connects to a specific instance of mongod.
 
-VS Code supports working with MongoDB databases via the Azure CosmosDB extension, you can create, manage and query MongoDB databases from within VS Code. To learn more, visit the VS Code docs: Working with MongoDB.
+VS Code supports working with MongoDB databases via the Azure CosmosDB extension, you can create, manage and query MongoDB databases from within VS Code. To learn more, visit the VS Code docs: Working with MongoDB (https://code.visualstudio.com/docs/azure/mongodb).
 
 Learn more in the MongoDB docs:
 
