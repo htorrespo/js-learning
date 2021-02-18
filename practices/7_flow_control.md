@@ -306,6 +306,26 @@ _.then()_ chains altogether. Consider the Promise-based example below:
 
 pagina 82
 
+```javascript
+function connect() {
+  return new Promise((resolve, reject) => {
+    asyncDBconnect('http://localhost:1234')
+    .then(asyncGetSession)
+    .then(asyncGetUser)
+    .then(asyncLogAccess)
+    .then(result => resolve(result))
+    .catch(err => reject(err))
+  });
+}
+
+// run connect (self-executing function)
+(() => {
+connect();
+.then(result => console.log(result))
+.catch(err => console.log(err))
+})();
+To rewrite this using async / await :
+```
 
 ### Promises, Promises
 ### Asynchronous Awaits in Synchronous Loops
