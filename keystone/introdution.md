@@ -294,4 +294,9 @@ Learn more in the MongoDB docs:
 - CRUD: Create, Read, Update, Delete
 - Reference Docs
 
+
+Revisar el siguente link
+https://v4.keystonejs.com/getting-started/yo-generator
+
+
 &_____________________________________________________________________
