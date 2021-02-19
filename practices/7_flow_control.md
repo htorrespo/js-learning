@@ -324,11 +324,174 @@ connect();
 .then(result => console.log(result))
 .catch(err => console.log(err))
 })();
-To rewrite this using async / await :
 ```
 
+To rewrite this using async / await :
+
+1. the outer function must be preceded by an async statement, and
+2. calls to asynchronous Promise-based functions must be preceded by
+_await_ to ensure processing completes before the next command executes.
+
+```javascript
+async function connect() {
+  try {
+    const
+    connection = await asyncDBconnect('http://localhost:1234'),
+    session = await asyncGetSession(connection),
+    user = await asyncGetUser(session),
+    log = await asyncLogAccess(user);
+    return log;
+  }
+
+  catch (e) {
+    console.log('error', err);
+    return null;
+  }
+}
+
+// run connect (self-executing async function)
+(async () => { await connect(); })();
+```
+
+
+_await_ effectively makes each call appear as though it’s synchronous, while not
+holding up JavaScript’s single processing thread. In addition, _async_ functions
+always return a Promise so they, in turn, can be called by other _async_ functions.
+
+
+_async_ / _await_ code may not be shorter, but there are considerable benefits:
+
+1. The syntax is cleaner. There are fewer brackets and less to get wrong.
+2. Debugging is easier. Breakpoints can be set on any _await_ statement.
+3. Error handling is better. _try_ / _catch_ blocks can be used in the same way as
+synchronous code.
+4. Support is good. It’s implemented in all browsers (except IE and Opera
+Mini) and Node 7.6+.
+
+That said, not all is perfect …
+
+
 ### Promises, Promises
+
+_async_ / _await_ still relies on Promises, which ultimately rely on callbacks. You’ll
+need to understand how Promises work, and there’s no direct equivalent of
+_Promise.all()_ and _Promise.race()_ . It’s easy to forget about _Promise.all()_ ,
+which is more efficient than using a series of unrelated _await_ commands.
+
+
 ### Asynchronous Awaits in Synchronous Loops
+
+At some point you’ll try calling an asynchronous function inside a synchronous
+loop. For example:
+
+```javascript
+async function process(array) {
+  for (let i of array) {
+    await doSomething(i);
+  }
+}
+```
+
+It won’t work. Neither will this:
+
+```javascript
+async function process(array) {
+  array.forEach(async i => {
+    await doSomething(i);
+  });
+}
+```
+
+The loops themselves remain synchronous and will always complete before their
+inner asynchronous operations.
+
+ES2018 introduces asynchronous iterators, which are just like regular iterators
+except the _next()_ method returns a Promise. Therefore, the _await_ keyword
+can be used with _for … of_ loops to run asynchronous operations in series. for
+example:
+
+```javascript
+async function process(array) {
+  for await (let i of array) {
+    doSomething(i);
+  }
+}
+```
+However, until asynchronous iterators are implemented, it’s possibly best to map
+array items to an _async_ function and run them with _Promise.all()_ . For
+example:
+
+```javascript
+const
+  todo = ['a', 'b', 'c'],
+  alltodo = todo.map(async (v, i) => {
+    console.log('iteration', i);
+    await processSomething(v);
+  });
+
+await Promise.all(alltodo);
+```
+
+This has the benefit of running tasks in parallel, but it’s not possible to pass the
+result of one iteration to another, and mapping large arrays could be
+computationally expensive.
+
+
 ### try/catch Ugliness
 
+_async_ functions will silently exit if you omit a _try / catch_ around any _await_
+which fails. If you have a long set of asynchronous _await_ commands, you may
+need multiple _try / catch_ blocks.
+
+One alternative is a higher-order function, which catches errors so _try / catch_
+blocks become unnecessary (thanks to @wesbos for the suggestion):
+
+```javascript
+async function connect() {
+  const
+    connection = await asyncDBconnect('http://localhost:1234'),
+    session = await asyncGetSession(connection),
+    user = await asyncGetUser(session),
+    log = await asyncLogAccess(user);
+
+  return true;
+}
+
+// higher-order function to catch errors
+function catchErrors(fn) {
+  return function (...args) {
+    return fn(...args).catch(err => {
+      console.log('ERROR', err);
+    });
+  }
+}
+
+(async () => {
+  await catchErrors(connect)();
+})();
+```
+
+However, this option may not be practical in situations where an application must
+react to some errors in a different way from others.
+
+Despite some pitfalls, _async / await_ is an elegant addition to JavaScript. Further
+resources:
+
+- MDN async (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function) and await (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await)
+- Async functions - making promises friendly (https://developers.google.com/web/fundamentals/primers/async-functions)
+- TC39 Async Functions specification
+- Simplifying Asynchronous Coding with Async Functions (https://www.sitepoint.com/simplifying-asynchronous-coding-async-functions/)
+
 ## JavaScript Journey
+
+Asynchronous programming is a challenge that’s impossible to avoid in
+JavaScript. Callbacks are essential in most applications, but it’s easy to become
+entangled in deeply nested functions.
+
+Promises abstract callbacks, but there are many syntactical traps. Converting
+existing functions can be a chore and _.then()_ chains still look messy.
+
+Fortunately, _async / await_ delivers clarity. Code looks synchronous, but it can’t
+monopolize the single processing thread. It will change the way you write
+JavaScript and could even make you appreciate Promises — if you didn’t before!
+
