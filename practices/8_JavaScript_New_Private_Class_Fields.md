@@ -126,10 +126,101 @@ class Dog extends Animal {
 `to ${to}`
 ```
 
+_super_ refers to the parent class and is usually called in the _constructor_ . In this
+example, the Dog _speak()_ method overrides the one defined in _Animal_ .
+
+Object instances of Dog can now be created:
+
+```javascript
+const rex = new Dog('Rex');
+rex.speak('everyone'); // Rex says "woof" to everyone
+
+rex.eats = 'anything';
+console.log( rex.dinner ); // Rex eats anything for dinner.
+```
 
 ## Static Methods and Properties
 
+Defining a method with the static keyword allows it to be called on a class
+without creating an object instance. JavaScript doesn’t support static properties
+in the same way as other languages, but it is possible to add properties to the
+class definition (a class is a JavaScript object in itself!).
+
+The Dog class can be adapted to retain a count of how many dog objects have
+been created:
+
+```javascript
+class Dog extends Animal {
+
+  constructor(name) {
+  
+    // call the Animal constructor
+    super(name, 4, 'woof');
+    this.type = 'dog';
+
+    // update count of Dog objects
+    Dog.count++;
+  }
+
+  // override Animal.speak
+  speak(to) {
+    super.speak();
+      if (to) console.log(`to ${to}`);
+  }
+
+  // return number of dog objects
+  static get COUNT() {
+    return Dog.count;
+  }
+}
+
+// static property (added after class is defined)
+Dog.count = 0;
+```
+
+The class’s static _COUNT_ getter returns the number of dogs created:
+
+```javascript
+console.log(`Dogs defined: ${Dog.COUNT}`); // Dogs defined: 0
+const don = new Dog('Don');
+
+console.log(`Dogs defined: ${Dog.COUNT}`); // Dogs defined: 1
+const kim = new Dog('Kim');
+
+console.log(`Dogs defined: ${Dog.COUNT}`); // Dogs defined: 2
+```
+
+For more information, refer to Object-oriented JavaScript: A Deep Dive into ES6
+Classes. (https://www.sitepoint.com/object-oriented-javascript-deep-dive-es6-classes/)
+
+
 ## ESnext Class Fields
+
+The class fields proposal allows properties to be initialized at the top of a class:
+
+```javascript
+class MyClass {
+  a = 1;
+  b = 2;
+  c = 3;
+}
+```
+This is equivalent to:
+
+```javascript
+class MyClass {
+  constructor() {
+    this.a = 1;
+    this.b = 2;
+    this.c = 3;
+  }
+}
+```
+
+Initializers are executed before any constructor runs (presuming a constructor is
+still necessary).
+
+pagina 93
 
 ### Static Class Fields
 
