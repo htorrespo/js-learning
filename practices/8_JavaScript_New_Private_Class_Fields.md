@@ -62,7 +62,70 @@ rex.speak(); // Rex says "growl"
 Setters are special methods used to define values only. Similarly, Getters are
 special methods used to return a value only. For example:
 
+```javascript
+class Animal {
+
+  constructor(name = 'anonymous', legs = 4, noise = 'nothing') {
+    this.type = 'animal';
+    this.name = name;
+    this.legs = legs;
+    this.noise = noise;
+
+  }
+
+  speak() {
+    console.log(`${this.name} says "${this.noise}"`);
+  }
+
+  walk() {
+    console.log(`${this.name} walks on ${this.legs} legs`);
+  }
+
+  // setter
+  set eats(food) {
+    this.food = food;
+  }
+
+  // getter
+  get dinner() {
+    return `${this.name} eats ${this.food || 'nothing'} for dinner.`;
+  }
+}
+
+const rex = new Animal('Rex', 4, 'woof');
+rex.eats = 'anything';
+console.log( rex.dinner ); // Rex eats anything for dinner.
+```
+
 ## Child or Sub-Classes
+
+It’s often practical to use one class as the base for another. If we’re mostly
+creating dog objects, _Animal_ is too generic, and we must specify the same 4-leg
+and “woof” noise defaults every time.
+
+A Dog class can inherit all the properties and methods from the Animal class
+using _extends_ . Dog-specific properties and methods can be added or removed
+as necessary:
+
+```javascript
+class Dog extends Animal {
+
+  constructor(name) {
+  // call the Animal constructor
+    super(name, 4, 'woof');
+    this.type = 'dog';
+  }
+  
+  'woof'// override Animal.speak
+  speak(to) {
+    super.speak();
+      if (to) console.log(`to ${to}`);
+  }
+}
+
+`to ${to}`
+```
+
 
 ## Static Methods and Properties
 
