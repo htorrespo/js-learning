@@ -224,7 +224,72 @@ pagina 93
 
 ### Static Class Fields
 
+Class fields permit _static_ properties to be declared within the _class_ . For
+example:
+
+
+```javascript
+class MyClass {
+  x = 1;
+  y = 2;
+  static z = 3;
+}
+
+console.log( MyClass.z ); // 3
+```
+
+The inelegant ES6 equivalent:
+
+```javascript
+class MyClass {
+  constructor() {
+    this.x = 1;
+    this.y = 2;
+  }
+}
+
+MyClass.z = 3;
+console.log( MyClass.z ); // 3
+```
+
 ### Private Class Fields
+
+All properties in ES6 classes are public by default and can be examined or
+modified outside the class. In the _Animal_ example above, there’s nothing to
+prevent the _food_ property being changed without calling the _eats_ setter:
+
+```javascript
+class Animal {
+  constructor(name = 'anonymous', legs = 4, noise = 'nothing') {
+    this.type = 'animal';
+    this.name = name;
+    this.legs = legs;
+    this.noise = noise;
+  }
+  
+  set eats(food) {
+    this.food = food;
+  }
+  
+  get dinner() {
+    return `${this.name} eats ${this.food || 'nothing'} for dinner.`;
+  }
+}
+
+const rex = new Animal('Rex', 4, 'woof');
+rex.eats = 'anything'; // standard setter
+rex.food = 'tofu'; // bypass the eats setter altogether
+console.log( rex.dinner ); // Rex eats tofu for dinner.
+```
+
+Other languages permit private properties to be declared. That’s not possible
+in ES6, although developers can work around it using an underscore convention
+( `_propertyName` ), closures, symbols, or WeakMaps
+(https://curiosity-driven.org/private-properties-in-javascript).
+
+In ESnext, private class fields are defined using a hash # prefix:
+
+
 
 ## Immediate Benefit: Cleaner React Code!
 
