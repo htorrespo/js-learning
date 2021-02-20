@@ -287,6 +287,8 @@ in ES6, although developers can work around it using an underscore convention
 ( `_propertyName` ), closures, symbols, or WeakMaps
 (https://curiosity-driven.org/private-properties-in-javascript).
 
+pagina 95
+
 In ESnext, private class fields are defined using a hash # prefix:
 
 
