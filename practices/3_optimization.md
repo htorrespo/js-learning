@@ -1,4 +1,4 @@
-# JavaScript Performance Optimization Tips
+# JavaScript Performance Optimization Tips: An Overview
 
 ## Setting the Stage
 
