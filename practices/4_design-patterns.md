@@ -1,4 +1,4 @@
-# Design Patterns
+# JavaScript Design Patterns: The Singleton
 
 In this chapter, we’ll dig into the best way to implement a singleton in
 JavaScript, looking at how this has evolved with the rise of ES6.
