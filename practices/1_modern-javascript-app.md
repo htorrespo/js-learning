@@ -1,7 +1,16 @@
+# The Anatomy of a Modern JavaScript Application
+
+There’s no doubt that the JavaScript ecosystem changes fast. Not only are
+new tools and frameworks introduced and developed at a rapid rate, the
+language itself has undergone big changes with the introduction of ES2015
+(aka ES6). Understandably, many articles have been written complaining
+about how difficult it is to learn modern JavaScript development these days.
+
 
 ## Who Should Read This?
 This is for all front-end developers who wish to improve their JavaScript 
 skills. 
+
 You’ll need to be familiar with HTML and CSS and have a reasonable level 
 of understanding of JavaScript in order to follow the discussion.
 
