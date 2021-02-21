@@ -291,10 +291,129 @@ pagina 95
 
 In ESnext, private class fields are defined using a hash # prefix:
 
+```javascript
+class MyClass {
+
+  a = 1; // .a is public
+  #b = 2; // .#b is private
+  static #c = 3; // .#c is private and static
+  
+  incB() {
+    this.#b++;
+  }
+}
+
+const m = new MyClass();
+m.incB(); // runs OK
+m.#b = 0; // error - private property cannot be modified outside class
+```
+
+Note that there’s no way to define private methods, getters and setters,
+although a TC39 stage 2: draft proposal (https://github.com/tc39/proposal-private-methods) 
+suggests using a hash # prefix on names. For example:
+
+```javascript
+class MyClass {
+
+  // private property
+  #x = 0;
+  
+  // private method (can only be called within the class)
+  #incX() {
+    this.#x++;
+  }
+
+  // private setter (can only be called within the class)
+  set #setX(x) {
+    this.#x = x;
+  }
+
+  // private getter (can only be called within the class)
+  get #getX() {
+    return this.$x;
+  }
+}
+```
 
 
 ## Immediate Benefit: Cleaner React Code!
 
+React components often have methods tied to DOM events. To ensure _this_
+resolves to the component, it’s necessary to bind every method accordingly. For
+example:
+
+```javascript
+class App extends Component {
+
+  constructor() {
+    super();
+    state = { count: 0 };
+
+    // bind all methods
+    this.incCount = this.incCount.bind(this);
+  }
+
+  incCount() {
+    this.setState(ps => ({ count: ps.count + 1 }));
+  }
+
+  render() {
+    return (
+      <div>
+      <p>{ this.state.count }</p>
+      <button onClick={this.incCount}>add one</button>
+      </div>
+    );
+  }
+}
+```
+
+If incCount is defined as a class field, it can be set to a function using an ES6 =>
+fat arrow, which automatically binds it to the defining object. The state can also
+be declared as a class field so no constructor is required:
+
+```javascript
+class App extends Component {
+
+  state = { count: 0 };
+  incCount = () => {
+    this.setState(ps => ({ count: ps.count + 1 }));
+  };
+
+  render() {
+    return (
+      <div>
+      <p>{ this.state.count }</p>
+      <button onClick={this.incCount}>add one</button>
+      </div>
+    );
+  }
+}
+```
+
 ## Using Class Fields Today
+
+Class fields are not currently supported in browsers or Node.js. However, it’s
+possible to transpile the syntax using Babel (https://babeljs.io/docs/en/babel-plugin-proposal-class-properties), 
+which is enabled by default when
+using Create React App (https://github.com/facebook/create-react-app). 
+Alternatively, Babel can be installed and configured
+using the following terminal commands:
+
+```terminal
+mkdir class-properties
+cd class-properties
+npm init -y
+npm install --save-dev babel-cli babel-plugin-transform-class-properties
+echo '{ "plugins": ["transform-class-properties"] }' > .babelrc
+```
+
+Add a build command to the scripts section of package.json :
+
+```json
+"scripts": {
+"build": "babel in.js -o out.js"
+},
+```
 
 ## Class Fields: an Improvement?
