@@ -416,4 +416,24 @@ Add a build command to the scripts section of package.json :
 },
 ```
 
+Then run with _npm run build_ to transpile the ESnext file _in.js_ to a crossbrowser-
+compatible _out.js_ .
+
+Babel support for private methods, getters and setters has been proposed (https://github.com/babel/proposals/issues/22).
+
+
 ## Class Fields: an Improvement?
+
+ES6 class definitions were simplistic. Class fields should aid readability and
+enable some interesting options. I don’t particularly like using a hash # to
+denote private members, but unexpected behaviors and performance issues
+would be incurred without it (refer to JavaScript’s new #private class fields 
+(https://jamie.build/javascripts-new-private-class-fields.html) for a
+detailed explanation).
+
+Perhaps it goes without saying, but I’m going to say it anyway: the concepts
+discussed in this article are subject to change and may never be implemented!
+That said, JavaScript class fields have practical benefits and interest is rising. It’s
+a safe bet.
+
+
